@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    active: local
+#    激活指定的环境配置文件，自动加载local
   application:
      name: ai-autocode
   # session ??
