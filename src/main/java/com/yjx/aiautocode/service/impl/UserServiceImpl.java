@@ -184,7 +184,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public String getEncryptPassword(String userPassword) {
         // 盐值，混淆密码
+        //用于对用户密码进行 加盐（Salt）并计算 MD5 哈希值，目的是增强密码存储的安全性
         final String SALT = "yupi";
+        //使用 Spring 的 DigestUtils.md5DigestAsHex()方法，对拼接后的字符串进行 MD5 计算
         return DigestUtils.md5DigestAsHex((userPassword + SALT).getBytes(StandardCharsets.UTF_8));
     }
 }
