@@ -8,16 +8,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
-class AiCodeGeneratorFacadeTest {
+class AiCodeGeneratorFacadeOldTest {
     @Resource
-    private AiCodeGeneratorFacade aiCodeGeneratorFacade;
+    private AiCodeGeneratorFacade_old aiCodeGeneratorFacadeOld;
 
     @Test
     void generateAndSaveCode() {
-        File file = aiCodeGeneratorFacade.generateAndSaveCode("生成一个简单的任务记录网站", CodeGenTypeEnum.HTML);
+        File file = aiCodeGeneratorFacadeOld.generateAndSaveCode("生成一个简单的任务记录网站", CodeGenTypeEnum.HTML);
         Assertions.assertNotNull(file);
     }
 }
