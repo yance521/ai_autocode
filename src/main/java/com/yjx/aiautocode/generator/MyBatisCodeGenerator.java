@@ -14,7 +14,7 @@ import java.util.Map;
 public class MyBatisCodeGenerator {
 
     // 要生成的表名
-    private static final String[] TABLE_NAMES = {"app"};
+    private static final String[] TABLE_NAMES = {"chat_history"};
 
     public static void main(String[] args) {
         // 获取数据元信息
@@ -47,7 +47,7 @@ public class MyBatisCodeGenerator {
 
         // 设置根包，建议先生成到一个临时目录下，生成代码之后，再移动到对应的项目目录
         globalConfig.getPackageConfig()
-                .setBasePackage("com.yjx.yuaicodemother.genresult");
+                .setBasePackage("com.yjx.aicodemother.genresult");
 
         // 设置表前缀和只生成哪些表，setGenerateTable 未配置时，生成所有表
         globalConfig.getStrategyConfig()
