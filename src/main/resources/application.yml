@@ -4,10 +4,10 @@ spring:
 #    激活指定的环境配置文件，自动加载local
   application:
      name: ai-autocode
-  # session ??
+  # session 配置
   session:
     store-type: redis
-    # session 30 ???
+    # session 30天过期
     timeout: 2592000
   # mysql
   datasource:
@@ -15,11 +15,24 @@ spring:
     url: jdbc:mysql://localhost:3306/ai_autocode
     username: root
     password: 123456
+      # redis
+  data:
+    redis:
+     host: localhost
+     port: 6379
+     password:
+     ttl: 3600 #键值对存活时间3600s 1 小时
+
 
 server:
   port: 8123
   servlet:
     context-path: /api
+    # cookie 30 天过期
+    session:
+      cookie:
+         max-age: 2592000
+
 
 # springdoc-openapi
 #  ??????
