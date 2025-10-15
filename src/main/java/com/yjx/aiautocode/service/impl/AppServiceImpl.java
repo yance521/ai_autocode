@@ -160,6 +160,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
         ThrowUtils.throwIf(!updateResult, ErrorCode.OPERATION_ERROR, "更新应用部署信息失败");
         // 10. 返回可访问的 URL
         String appDeployUrl = String.format("%s/%s/", AppConstant.CODE_DEPLOY_HOST, deployKey);
+        //在部署成功后接入异步的自动化截图上传功能
         generateAppScreenshotAsync(appId,appDeployUrl);
         return appDeployUrl;
     }
@@ -187,8 +188,6 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
             ThrowUtils.throwIf(!updated, ErrorCode.OPERATION_ERROR, "更新应用封面字段失败");
         });
     }
-
-
 
     /**
      * 删除应用时关联删除对话历史
