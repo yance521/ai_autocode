@@ -3,7 +3,7 @@ package com.yjx.aiautocode.ai;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.yjx.aiautocode.ai.model.CodeGenTypeEnum;
-import com.yjx.aiautocode.ai.tool.FileWriteTool;
+import com.yjx.aiautocode.ai.tool.*;
 import com.yjx.aiautocode.exception.BusinessException;
 import com.yjx.aiautocode.exception.ErrorCode;
 import com.yjx.aiautocode.service.ChatHistoryService;
@@ -36,6 +36,8 @@ public class AiCodeGeneratorServiceFactory {
     private ChatHistoryService chatHistoryService;
     @Resource
     private StreamingChatModel reasoningStreamingChatModel;
+    @Resource
+    private ToolManager toolManager;
 
     @Bean
     public AiCodeGeneratorService aiCodeGeneratorService() {
@@ -135,7 +137,7 @@ public class AiCodeGeneratorServiceFactory {
             case VUE_PROJECT -> AiServices.builder(AiCodeGeneratorService.class)
                     .streamingChatModel(reasoningStreamingChatModel)
                     .chatMemoryProvider(memoryId -> chatMemory)
-                    .tools(new FileWriteTool())
+                    .tools(toolManager.getAllTools())
                     //  hallucinatedToolNameStrategy 配置，当工具调用失败时，返回错误信息
                     .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
                             toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
