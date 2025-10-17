@@ -19,4 +19,5 @@ public interface AiCodeGenTypeRoutingService {
      */
     @SystemMessage(fromResource = "prompt/codegen-routing-system-prompt.txt")
     CodeGenTypeEnum routeCodeGenType(String userPrompt);
+
 }
