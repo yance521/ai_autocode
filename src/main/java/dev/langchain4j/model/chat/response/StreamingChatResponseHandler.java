@@ -3,7 +3,6 @@ package dev.langchain4j.model.chat.response;
 import dev.langchain4j.agent.tool.ToolExecutionRequest;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.model.chat.StreamingChatModel;
-import dev.langchain4j.model.chat.response.ChatResponse;
 
 /**
  * Represents a handler for a {@link StreamingChatModel} response.

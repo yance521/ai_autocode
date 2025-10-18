@@ -136,7 +136,7 @@ public class AppController {
         // 4. 构建应用代码目录路径（生成目录，非部署目录）
         String codeGenType = app.getCodeGenType();
         String sourceDirName = codeGenType + "_" + appId;
-        String sourceDirPath = AppConstant.CODE_OUTPUT_ROOT_DIR + File.separator + sourceDirName;
+        String sourceDirPath = AppConstant.CODE_OUTPUT_ROOT_DIR + File.separator + sourceDirName;//不同系统的文件路径分隔符
         // 5. 检查代码目录是否存在
         File sourceDir = new File(sourceDirPath);
         ThrowUtils.throwIf(!sourceDir.exists() || !sourceDir.isDirectory(),
@@ -165,6 +165,8 @@ public class AppController {
         User loginUser = userService.getLoginUser(request);
         Long appId = appService.createApp(appAddRequest, loginUser);
         return ResultUtils.success(appId);
+        //336733276435808260
+        //336733276435808256
     }
 
 
@@ -233,7 +235,6 @@ public class AppController {
     @GetMapping("/get/vo")
     public BaseResponse<AppVO> getAppVOById(long id) {
         ThrowUtils.throwIf(id <= 0, ErrorCode.PARAMS_ERROR);
-        // 查询数据库333894129778159616
         App app = appService.getById(id);
         ThrowUtils.throwIf(app == null, ErrorCode.NOT_FOUND_ERROR);
         // 获取封装类（包含用户信息）
@@ -276,8 +277,8 @@ public class AppController {
      */
     @PostMapping("/good/list/page/vo")
     @Cacheable(
-            value = "good_app_page",//
-            key = "T(com.yupi.yuaicodemother.utils.CacheKeyUtils).generateKey(#appQueryRequest)",//生成对应的key
+            value = "good_app_page",//相当于给缓存数据划分不同的"存储区域"（类似数据库的表概念）
+            key = "T(com.yjx.aiautocode.utils.CacheKeyUtils).generateKey(#appQueryRequest)",//生成对应的key
             condition = "#appQueryRequest.pageNum <= 10"//查询redis条件是：查询前10页的缓存
     )
     public BaseResponse<Page<AppVO>> listGoodAppVOByPage(@RequestBody AppQueryRequest appQueryRequest) {

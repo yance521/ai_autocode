@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 /**
  * Spring上下文工具类
  * 用于在静态方法中获取Spring Bean
+ * 上下文工具调用的优点：动态获取原型（Prototype）Bean
+ * 每次调用 getBean()会返回新实例（如果 Bean 是 @Scope("prototype")）
  */
 @Component
 public class SpringContextUtil implements ApplicationContextAware {

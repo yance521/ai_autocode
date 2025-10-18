@@ -34,7 +34,7 @@ public class App implements Serializable {
     /**
      * id
      */
-    @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)
+    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**

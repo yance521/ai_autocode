@@ -6,12 +6,12 @@ import cn.hutool.json.JSONUtil;
 /**
  * 缓存 key 生成工具类
  *
- * @author yupi
+ * @author YJX
  */
 public class CacheKeyUtils {
 
     /**
-     * 根据对象生成缓存key (JSON + MD5)
+     * 根据对象生成缓存key (JSON + MD5)先生成jason格式，再转换成MD5学
      *
      * @param obj 要生成key的对象
      * @return MD5哈希后的缓存key

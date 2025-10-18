@@ -119,7 +119,7 @@ public class OpenAiStreamingChatModel implements StreamingChatModel {
                                 .build())
                         .build();
 
-        dev.langchain4j.model.openai.OpenAiStreamingResponseBuilder openAiResponseBuilder = new OpenAiStreamingResponseBuilder();
+        OpenAiStreamingResponseBuilder openAiResponseBuilder = new OpenAiStreamingResponseBuilder();
         ToolExecutionRequestBuilder toolBuilder = new ToolExecutionRequestBuilder();
 
         client.chatCompletion(openAiRequest)

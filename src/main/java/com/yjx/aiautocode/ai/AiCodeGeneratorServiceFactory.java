@@ -151,8 +151,9 @@ public class AiCodeGeneratorServiceFactory {
             // HTML 和多文件生成使用默认模型
             case HTML, MULTI_FILE -> {
                 // 使用多例模式的 StreamingChatModel 解决并发问题
-                StreamingChatModel openAiStreamingChatModel = SpringContextUtil.getBean("streamingChatModelPrototype", StreamingChatModel.class);AiServices.builder(AiCodeGeneratorService.class);
-                yield AiServices.builder(AiCodeGeneratorService.class)
+                StreamingChatModel openAiStreamingChatModel = SpringContextUtil.getBean("streamingChatModelPrototype", StreamingChatModel.class);
+                //通过 Spring 上下文工具类 SpringContextUtil获取一个名为 "streamingChatModelPrototype"的 类为StreamingChatModelBean 实例
+                yield AiServices.builder(AiCodeGeneratorService.class)//利用AIService工厂实现接口
                     .chatModel(chatModel)
                     .streamingChatModel(openAiStreamingChatModel)
                     .chatMemory(chatMemory)

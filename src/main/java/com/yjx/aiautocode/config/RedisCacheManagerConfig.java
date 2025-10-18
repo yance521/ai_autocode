@@ -25,6 +25,7 @@ public class RedisCacheManagerConfig {
     @Bean
     public CacheManager cacheManager() {
         // 配置 ObjectMapper 支持 Java8 时间类型
+        //Jackson 不能很好地序列化 Java 8 的时间类型，注册这个模块后就可以正确处理这些类型
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         
