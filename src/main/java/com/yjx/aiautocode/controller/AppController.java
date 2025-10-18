@@ -19,6 +19,8 @@ import com.yjx.aiautocode.model.dto.app.*;
 import com.yjx.aiautocode.model.entity.App;
 import com.yjx.aiautocode.model.entity.User;
 import com.yjx.aiautocode.model.vo.AppVO;
+import com.yjx.aiautocode.ratelimiter.annotation.RateLimit;
+import com.yjx.aiautocode.ratelimiter.enums.RateLimitType;
 import com.yjx.aiautocode.service.ProjectDownloadService;
 import com.yjx.aiautocode.service.UserService;
 import jakarta.annotation.Resource;
@@ -36,6 +38,7 @@ import reactor.core.publisher.Mono;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +68,7 @@ public class AppController {
      * @return 生成结果流
      */
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)//提示本接口返回流式信息
+    @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                                        @RequestParam String message,
                                                        HttpServletRequest request) {
@@ -165,9 +169,49 @@ public class AppController {
         User loginUser = userService.getLoginUser(request);
         Long appId = appService.createApp(appAddRequest, loginUser);
         return ResultUtils.success(appId);
-        //336733276435808260
-        //336733276435808256
+
     }
+    /**
+     * 前端轮询查看构建状态
+     *
+     * @param appId 查询appid
+     * @param request       请求
+     * @return 是否成功
+     */
+    @GetMapping("/build/status/{appId}")
+    public BaseResponse<Map<String, Object>> getBuildStatus(@PathVariable Long appId, HttpServletRequest request) {
+        // 参数校验和权限检查
+        ThrowUtils.throwIf(appId == null || appId <= 0, ErrorCode.PARAMS_ERROR, "应用ID无效");
+        User loginUser = userService.getLoginUser(request);
+        App app = appService.getById(appId);
+        ThrowUtils.throwIf(app == null, ErrorCode.NOT_FOUND_ERROR, "应用不存在");
+
+        if (!app.getUserId().equals(loginUser.getId()) && !UserConstant.ADMIN_ROLE.equals(loginUser.getUserRole())) {
+            throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "无权限查询构建状态");
+        }
+        // 检查构建状态
+        String projectPath = AppConstant.CODE_OUTPUT_ROOT_DIR + File.separator + "vue_project_" + appId;
+        File projectDir = new File(projectPath);
+        File distDir = new File(projectDir, "dist");
+        Map<String, Object> buildStatus = new HashMap<>();
+        buildStatus.put("appId", appId);
+        buildStatus.put("projectExists", projectDir.exists());
+        buildStatus.put("distExists", distDir.exists());
+        buildStatus.put("isBuilding", false); // 同步构建模式下总是false
+        if (distDir.exists()) {
+            buildStatus.put("status", "completed");
+            buildStatus.put("message", "构建已完成");
+            buildStatus.put("buildTime", distDir.lastModified());
+        } else if (projectDir.exists()) {
+            buildStatus.put("status", "pending");
+            buildStatus.put("message", "项目已生成，等待构建");
+        } else {
+            buildStatus.put("status", "not_found");
+            buildStatus.put("message", "项目不存在");
+        }
+        return ResultUtils.success(buildStatus);
+    }
+
 
 
     /**

@@ -1,7 +1,11 @@
 package com.yjx.aiautocode.exception;
 
 import lombok.Getter;
-
+/**
+ * 自定义业务异常
+ *
+ * @author yjx
+ */
 @Getter
 public class BusinessException extends RuntimeException{
 

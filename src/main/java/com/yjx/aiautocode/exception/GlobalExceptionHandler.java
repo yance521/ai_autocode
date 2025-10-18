@@ -15,12 +15,15 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import java.io.IOException;
 import java.util.Map;
 
-@Hidden
+/**
+ * 全局异常处理器
+ */
+@Hidden//防止与swagger冲突
 @RestControllerAdvice//捕获所有 Controller 抛出的异常，返回统一的错误响应（避免暴露堆栈信息）
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(BusinessException.class)
+    @ExceptionHandler(BusinessException.class)//捕获所有 BusinessException
     public BaseResponse<?> businessExceptionHandler(BusinessException e) {
         log.error("BusinessException", e);
         // 尝试处理 SSE 请求
@@ -52,7 +55,7 @@ public class GlobalExceptionHandler {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
             return false;
-        }
+        }//获取当前 HTTP 请求和响应对象
         HttpServletRequest request = attributes.getRequest();
         HttpServletResponse response = attributes.getResponse();
         // 判断是否是SSE请求（通过Accept头或URL路径）
@@ -75,7 +78,7 @@ public class GlobalExceptionHandler {
                 String errorJson = JSONUtil.toJsonStr(errorData);
                 // 发送业务错误事件（避免与标准error事件冲突）
                 String sseData = "event: business-error\ndata: " + errorJson + "\n\n";
-                response.getWriter().write(sseData);
+                response.getWriter().write(sseData);//向客户端发送错误消息。
                 response.getWriter().flush();
                 // 发送结束事件
                 response.getWriter().write("event: done\ndata: {}\n\n");

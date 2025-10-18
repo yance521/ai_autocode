@@ -25,6 +25,8 @@ public class VueProjectBuilder {
                 .start(() -> {
                     try {
                         buildProject(projectPath);
+                        // 构建成功后发送 SSE 通知
+                       // sseEventPublisher.sendEvent(clientId, "build-success", "构建成功");
                     } catch (Exception e) {
                         log.error("异步构建 Vue 项目时发生异常: {}", e.getMessage(), e);
                     }
@@ -72,6 +74,7 @@ public class VueProjectBuilder {
 
     /**
      * 执行 npm install 命令
+     * 下载所有需要的第三方库
      */
     private boolean executeNpmInstall(File projectDir) {
         log.info("执行 npm install...");
@@ -81,6 +84,8 @@ public class VueProjectBuilder {
 
     /**
      * 执行 npm run build 命令
+     * 构建生产环境代码
+     * 生成 dist（或 build）目录（存放构建文件）
      */
     private boolean executeNpmBuild(File projectDir) {
         log.info("执行 npm run build...");
