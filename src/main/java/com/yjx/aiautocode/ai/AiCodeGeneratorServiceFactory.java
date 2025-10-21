@@ -2,6 +2,8 @@ package com.yjx.aiautocode.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.yjx.aiautocode.ai.guardrail.PromptSafetyInputGuardrail;
+import com.yjx.aiautocode.ai.guardrail.RetryOutputGuardrail;
 import com.yjx.aiautocode.ai.model.CodeGenTypeEnum;
 import com.yjx.aiautocode.ai.tool.*;
 import com.yjx.aiautocode.exception.BusinessException;
@@ -146,6 +148,10 @@ public class AiCodeGeneratorServiceFactory {
                     .hallucinatedToolNameStrategy(toolExecutionRequest -> ToolExecutionResultMessage.from(
                             toolExecutionRequest, "Error: there is no tool called " + toolExecutionRequest.name()
                     ))
+                    .inputGuardrails(new PromptSafetyInputGuardrail())//添加输入护轨
+                        //输出护轨可能影响流式输出，所以暂时取消
+//                    .outputGuardrails(new RetryOutputGuardrail())//添加输出护轨
+                    .maxSequentialToolsInvocations(20)//最大允许调用工具次数
                     .build();
             }
             // HTML 和多文件生成使用默认模型
@@ -157,6 +163,9 @@ public class AiCodeGeneratorServiceFactory {
                     .chatModel(chatModel)
                     .streamingChatModel(openAiStreamingChatModel)
                     .chatMemory(chatMemory)
+                    .inputGuardrails(new PromptSafetyInputGuardrail())//添加输入护轨
+                        //输出护轨可能影响流式输出，所以暂时取消
+//                  .outputGuardrails(new RetryOutputGuardrail())//添加输出护轨
                     .build();}
             default -> throw new BusinessException(ErrorCode.SYSTEM_ERROR,
                     "不支持的代码生成类型: " + codeGenType.getValue());

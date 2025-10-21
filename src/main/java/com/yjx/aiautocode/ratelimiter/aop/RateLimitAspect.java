@@ -45,7 +45,7 @@ public class RateLimitAspect {
         rateLimiter.expire(Duration.ofHours(1)); // 1 小时后过期
         // 设置限流器参数：每个时间窗口允许的请求数和时间窗口
         rateLimiter.trySetRate(RateType.OVERALL, rateLimit.rate(), rateLimit.rateInterval(), RateIntervalUnit.SECONDS);
-        // 尝试获取一个令牌，如果获取失败则限流
+        // 尝试获取一个令牌，如果获取失败则限流（令牌桶算法）
         if (!rateLimiter.tryAcquire(1)) {
             throw new BusinessException(ErrorCode.TOO_MANY_REQUEST, rateLimit.message());
         }

@@ -131,19 +131,19 @@ public class AiCodeGeneratorFacade {
      */
     private Flux<String> processTokenStream(TokenStream tokenStream,Long appId) {
         return Flux.create(sink -> {
-            tokenStream.onPartialResponse((String partialResponse) -> {
+            tokenStream.onPartialResponse((String partialResponse) -> {//ai响应数据
                         AiResponseMessage aiResponseMessage = new AiResponseMessage(partialResponse);
                         sink.next(JSONUtil.toJsonStr(aiResponseMessage));
                     })
-                    .onPartialToolExecutionRequest((index, toolExecutionRequest) -> {
+                    .onPartialToolExecutionRequest((index, toolExecutionRequest) -> {//调用工具
                         ToolRequestMessage toolRequestMessage = new ToolRequestMessage(toolExecutionRequest);
                         sink.next(JSONUtil.toJsonStr(toolRequestMessage));
                     })
-                    .onToolExecuted((ToolExecution toolExecution) -> {
+                    .onToolExecuted((ToolExecution toolExecution) -> {//工具执行完成
                         ToolExecutedMessage toolExecutedMessage = new ToolExecutedMessage(toolExecution);
                         sink.next(JSONUtil.toJsonStr(toolExecutedMessage));
                     })
-                    .onCompleteResponse((ChatResponse response) -> {
+                    .onCompleteResponse((ChatResponse response) -> {//模型完成响应
                         // 执行 Vue 项目构建（同步执行，确保预览时项目已就绪）
 //                        String projectPath = AppConstant.CODE_OUTPUT_ROOT_DIR + "/vue_project_" + appId;
 //                        vueProjectBuilder.buildProject(projectPath);
