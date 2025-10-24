@@ -41,4 +41,5 @@
 
 ### 5、精选应用展示
 <img width="672" height="651" alt="屏幕截图 2025-10-24 161714" src="https://github.com/user-attachments/assets/0d9b00a3-4a08-4824-a3a6-b22772c725f2" />
+
 利用Redis旁路缓存策略，缓存访问频率高的页面，如精选应用，我的应用等。
