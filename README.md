@@ -3,16 +3,21 @@
 
 ### 1、项目整体浏览
 <img width="2559" height="1599" alt="项目前端" src="https://github.com/user-attachments/assets/ed559274-a4b7-4070-96ff-5cbd0f91950d" />
+-项目首页
 <img width="2559" height="1548" alt="我的应用于精选应用" src="https://github.com/user-attachments/assets/275e72ef-7a26-4b79-916e-76fdb1736f84" />
+-我的应用、精选应用展示
 
 ### 2、ai对话界面
 <img width="2559" height="1599" alt="生成应用" src="https://github.com/user-attachments/assets/b741922a-68b7-485e-93df-325976d72b55" />
+-生成应用
 <img width="1028" height="1003" alt="工具调用的前端显示" src="https://github.com/user-attachments/assets/361daf12-9e9c-49d7-acb7-0806b44aa2ea" />
+-工具调用展示
 
 ### 3、生成应用的实时展示与部署
 <img width="2558" height="1265" alt="本地部署" src="https://github.com/user-attachments/assets/4625e4bb-da37-45bd-aade-03178d0b14b8" />
+-本地部署
 <img width="2558" height="1529" alt="本地部署到nginx服务器" src="https://github.com/user-attachments/assets/5ac4cb4d-3284-4ef8-b381-b8c19b15a21b" />
-
+-本地部署查看
 
 ## 二、项目后端主要功能的架构分析
 
