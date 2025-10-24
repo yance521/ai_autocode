@@ -64,7 +64,7 @@ public class ScreenshotServiceImpl implements ScreenshotService {
             return null;
         }
         // 生成 COS 对象键
-        String fileName = UUID.randomUUID().toString().substring(0, 8) + "_compressed.jpg";
+        String fileName = UUID.randomUUID().toString().substring(0, 8) + "_compressed.jpg";//uuid截取9位
         String cosKey = generateScreenshotKey(fileName);
         return cosManager.uploadFile(cosKey, screenshotFile);
     }

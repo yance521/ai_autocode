@@ -13,6 +13,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 
+/**
+ * AI模型监听器
+ * 分别实现ChatModelListener的三个方法：onRequest（监听请求信息）、onResponse（监听响应信息）、onError（监听错误信息）
+ */
+
 @Component
 @Slf4j
 public class AiModelMonitorListener implements ChatModelListener {
@@ -20,20 +25,20 @@ public class AiModelMonitorListener implements ChatModelListener {
     // 用于存储请求开始时间的键
     private static final String REQUEST_START_TIME_KEY = "request_start_time";
     // 用于监控上下文传递（因为请求和响应事件的触发不是同一个线程）
-    private static final String MONITOR_CONTEXT_KEY = "monitor_context";
+    private static final String MONITOR_CONTEXT_KEY = "monitor_context";//存放上下文
     
     @Resource
     private AiModelMetricsCollector aiModelMetricsCollector;
 
     @Override
-    public void onRequest(ChatModelRequestContext requestContext) {
+    public void onRequest(ChatModelRequestContext requestContext) {//Listener 自动调用
         // 记录请求开始时间
         requestContext.attributes().put(REQUEST_START_TIME_KEY, Instant.now());
         // 从监控上下文中获取信息
-        MonitorContext context = MonitorContextHolder.getContext();
+        MonitorContext context = MonitorContextHolder.getContext();//ThreadLocal中获取
         String userId = context.getUserId();
         String appId = context.getAppId();
-        requestContext.attributes().put(MONITOR_CONTEXT_KEY, context);
+        requestContext.attributes().put(MONITOR_CONTEXT_KEY, context);//由于监听器是异步执行的，所以需要将上下文传递给响应事件
         // 获取模型名称
         String modelName = requestContext.chatRequest().modelName();
         // 记录请求指标

@@ -14,7 +14,7 @@ public @interface RateLimit {
     /**
      * 限流key前缀
      */
-    String key() default "";
+    String key() default "";//成员变量  允许为成员变量指定默认值（通过 default关键字）
     
     /**
      * 每个时间窗口允许的请求数

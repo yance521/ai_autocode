@@ -45,9 +45,9 @@ import java.util.Map;
 /**
  * 应用 控制层。
  *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
+ * @author <a href="https://github.com/liyangce521">程序员鱼皮</a>
  */
-@RestController
+@RestController//内部的ResponseBody将方法返回值序列化为响应体
 @RequestMapping("/app")
 public class AppController {
 
@@ -69,6 +69,7 @@ public class AppController {
      */
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)//提示本接口返回流式信息
     @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
+    //每60s请求5次
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                                        @RequestParam String message,
                                                        HttpServletRequest request) {
@@ -80,7 +81,7 @@ public class AppController {
         // 调用服务生成代码（流式）
         Flux<String> contentFlux = appService.chatToGenCode(appId, message, loginUser);
         // 转换为 ServerSentEvent 格式
-        return contentFlux
+        return contentFlux//流式处理
                 .map(chunk -> {
                     // 将内容包装成JSON对象
                     Map<String, String> wrapper = Map.of("d", chunk);//包装为键值对
@@ -321,7 +322,7 @@ public class AppController {
      */
     @PostMapping("/good/list/page/vo")
     @Cacheable(
-            value = "good_app_page",//相当于给缓存数据划分不同的"存储区域"（类似数据库的表概念）
+            value = "good_app_page",//相当于给缓存数据划分不同的"存储区域"（类似数据库的表概念）等同于cacheNames，与map里的value区分
             key = "T(com.yjx.aiautocode.utils.CacheKeyUtils).generateKey(#appQueryRequest)",//生成对应的key
             condition = "#appQueryRequest.pageNum <= 10"//查询redis条件是：查询前10页的缓存
     )

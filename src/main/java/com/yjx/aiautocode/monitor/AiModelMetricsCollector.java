@@ -23,7 +23,7 @@ public class AiModelMetricsCollector {
     private MeterRegistry meterRegistry;
 
     // 缓存已创建的指标，避免重复创建（按指标类型分离缓存），缓存指标收集器
-    private final ConcurrentMap<String, Counter> requestCountersCache = new ConcurrentHashMap<>();//并发hashmap
+    private final ConcurrentMap<String, Counter> requestCountersCache = new ConcurrentHashMap<>();//并发hashmap实现缓存机制
     private final ConcurrentMap<String, Counter> errorCountersCache = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, Counter> tokenCountersCache = new ConcurrentHashMap<>();
     private final ConcurrentMap<String, Timer> responseTimersCache = new ConcurrentHashMap<>();
@@ -41,7 +41,7 @@ public class AiModelMetricsCollector {
                         .tag("model_name", modelName)
                         .tag("status", status)
                         .register(meterRegistry)//注册到指标注册器
-        );
+        );//构建counter指标，并加载到缓存
         counter.increment();
     }
 
@@ -76,8 +76,8 @@ public class AiModelMetricsCollector {
                         .tag("model_name", modelName)
                         .tag("token_type", tokenType)
                         .register(meterRegistry)
-        );
-        counter.increment(tokenCount);
+        );//构建counter指标，并加载到缓存
+        counter.increment(tokenCount);//检测指标增加实际调用次数
     }
 
     /**

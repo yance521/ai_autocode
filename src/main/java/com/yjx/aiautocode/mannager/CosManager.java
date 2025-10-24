@@ -33,7 +33,14 @@ public class CosManager {
      * @return 上传结果
      */
     public PutObjectResult putObject(String key, File file) {
-        PutObjectRequest putObjectRequest = new PutObjectRequest(cosClientConfig.getBucket(), key, file);
+        // 1. 创建一个上传请求对象
+        PutObjectRequest putObjectRequest = new PutObjectRequest(
+                cosClientConfig.getBucket(), // 存储桶名称
+                key,                        // 对象在COS中的唯一标识（如"images/avatar.jpg"）
+                file                        // 本地文件对象
+        );
+
+        // 2. 调用COS客户端执行上传，返回上传结果
         return cosClient.putObject(putObjectRequest);
     }
 

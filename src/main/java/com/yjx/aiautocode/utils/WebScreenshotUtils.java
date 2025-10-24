@@ -34,7 +34,7 @@ public class WebScreenshotUtils {
     static {
         final int DEFAULT_WIDTH = 1600;
         final int DEFAULT_HEIGHT = 900;
-        webDriver = initChromeDriver(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        webDriver = initChromeDriver(DEFAULT_WIDTH, DEFAULT_HEIGHT);//打开窗口大小
     }
 
     /**

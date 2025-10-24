@@ -88,7 +88,7 @@ public class AiCodeGeneratorServiceFactory {
      * 根据 appId 和代码生成类型获取服务（带缓存）
      */
     public AiCodeGeneratorService getAiCodeGeneratorService(long appId, CodeGenTypeEnum codeGenType) {
-        String cacheKey = buildCacheKey(appId, codeGenType);
+        String cacheKey = buildCacheKey(appId, codeGenType);//唯一标识
         return serviceCache.get(cacheKey, key -> createAiCodeGeneratorService(appId, codeGenType));
     }
 

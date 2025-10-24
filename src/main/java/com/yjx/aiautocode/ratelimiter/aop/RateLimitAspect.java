@@ -32,21 +32,26 @@ import java.time.Duration;
 public class RateLimitAspect {
 
     @Resource
-    private RedissonClient redissonClient;
+    private RedissonClient redissonClient;//Redisson 提供的分布式限流器，基于 Redis 实现，支持集群环境下的全局限流
 
     @Resource
     private UserService userService;
 
     @Before("@annotation(rateLimit)")
     public void doBefore(JoinPoint point, RateLimit rateLimit) {
-        String key = generateRateLimitKey(point, rateLimit);
+        String key = generateRateLimitKey(point, rateLimit);//生成唯一识别键
         // 使用 Redisson 的分布式限流器
         RRateLimiter rateLimiter = redissonClient.getRateLimiter(key);
         rateLimiter.expire(Duration.ofHours(1)); // 1 小时后过期
         // 设置限流器参数：每个时间窗口允许的请求数和时间窗口
-        rateLimiter.trySetRate(RateType.OVERALL, rateLimit.rate(), rateLimit.rateInterval(), RateIntervalUnit.SECONDS);
+        rateLimiter.trySetRate(
+                RateType.OVERALL,          // 限流类型：全局（OVERALL）或单机（PER_CLIENT）
+                rateLimit.rate(),          // 允许的请求数（如每秒10次）
+                rateLimit.rateInterval(),  // 时间窗口（如1秒）
+                RateIntervalUnit.SECONDS   // 时间单位
+        );
         // 尝试获取一个令牌，如果获取失败则限流（令牌桶算法）
-        if (!rateLimiter.tryAcquire(1)) {
+        if (!rateLimiter.tryAcquire(1)) {//tryAcquire(1)获取一个令牌，返回是否成功
             throw new BusinessException(ErrorCode.TOO_MANY_REQUEST, rateLimit.message());
         }
     }

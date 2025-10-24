@@ -35,6 +35,7 @@ public class StreamingChatModelConfig {
 
     @Bean
     @Scope("prototype")
+    //@Scope("prototype")是 Spring 框架中用于指定 Bean 作用域的注解，表示每次请求该 Bean 时都会创建一个新的实例（非单例）
     public StreamingChatModel streamingChatModelPrototype() {
         return OpenAiStreamingChatModel.builder()
                 .apiKey(apiKey)

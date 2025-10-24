@@ -63,7 +63,7 @@ public class ProjectDownloadServiceImpl implements ProjectDownloadService {
         try {
             // 使用 Hutool 的 ZipUtil 直接将过滤后的目录压缩到响应输出流
             ZipUtil.zip(response.getOutputStream(), StandardCharsets.UTF_8, false, filter, projectDir);//项目目录内的文件过滤压缩到下载文件夹
-            log.info("项目打包下载完成: {}", downloadFileName);
+            log.info("项目打包下载完成: {}", downloadFileName);//response.getOutputStream()向客户端（浏览器）写入数据
         } catch (Exception e) {
             log.error("项目打包下载异常", e);
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "项目打包下载失败");

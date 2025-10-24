@@ -20,7 +20,7 @@ public class MultiFileCodeParser implements CodeParser<MultiFileCodeResult> {
     public MultiFileCodeResult parseCode(String codeContent) {
         MultiFileCodeResult result = new MultiFileCodeResult();
         // 提取各类代码
-        String htmlCode = extractCodeByPattern(codeContent, HTML_CODE_PATTERN);
+        String htmlCode = extractCodeByPattern(codeContent, HTML_CODE_PATTERN);//正则表达式匹配
         String cssCode = extractCodeByPattern(codeContent, CSS_CODE_PATTERN);
         String jsCode = extractCodeByPattern(codeContent, JS_CODE_PATTERN);
         // 设置HTML代码
