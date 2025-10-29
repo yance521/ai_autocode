@@ -5,7 +5,7 @@
 create database if not exists ai_autocode;
 
 -- 切换库
-use yu_ai_code_mother;
+use ai_autocode;
 
 -- 用户表
 -- 以下是建表语句
